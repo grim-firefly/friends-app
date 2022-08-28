@@ -1,0 +1,14 @@
+.app__body {
+	// background-color: #f8f8f8;
+	background-color: #ececec;
+	height: 90vh;
+	width: 90vw;
+	overflow: hidden;
+
+}
+
+@media (max-width: 1100px) {
+	.app__body {
+		width: 100%;
+	}
+}

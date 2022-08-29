@@ -26,7 +26,7 @@ const Sidebar = () => {
 
 					<button className={`${Style.sidebar__btn} rounded-full`}><MdOutlineDonutLarge /> </button>
 					<button className={`${Style.sidebar__btn} rounded-full`}><BsFillChatLeftTextFill /></button>
-					<button onClick={() => setMenu(!menu)} onBlur={() => setMenu(!menu)} className={`${Style.sidebar__btn} rounded-full`}><FiMoreVertical /> </button>
+					<button onClick={() => setMenu(!menu)} onBlur={() => setMenu(false)} className={`${Style.sidebar__btn} rounded-full`}><FiMoreVertical /> </button>
 					<div className={`py-2 bg-white flex-col absolute top-full right-0 rounded-md overflow-hidden shadow-xl  ${menu ? 'flex' : 'hidden'} `}>
 						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>New Chat</button>
 						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>Settings</button>
@@ -52,6 +52,8 @@ const Sidebar = () => {
 				<SidebarChat name={"MD. Khairul Hasan Sajid"} massage={"Hey ! I am using whatsapp.."} />
 				<SidebarChat name={"Badsha Faysal"} massage={"Hey ! I am using whatsapp.."} />
 				<SidebarChat name={"Tahsin Haider"} massage={"Hey ! I am using whatsapp.."} />
+				<SidebarChat name={"Ismail Hossain"} massage={"Hey ! I am using whatsapp.."} />
+				<SidebarChat name={"Mehedi Hasan"} massage={"Hey ! I am using whatsapp.."} />
 
 			</div>
 		</div>

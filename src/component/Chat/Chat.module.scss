@@ -29,8 +29,35 @@
 
 .chat__body {
 	flex: 1;
-	background:url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+	background: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
 	background-repeat: repeat;
 	padding: 30px;
 	overflow: scroll;
+
+	.chat__message {
+		background-color: #fff;
+		font-size: 16px;
+		padding: 10px;
+		border-radius: 10px;
+		width: fit-content;
+		position: relative;
+		margin-bottom: 20px;
+		.chat__name{
+			position: absolute;
+			white-space: nowrap;
+			font-size: xx-small;
+			top: -15px;
+			font-weight: bold;
+			
+		}
+		.chat__timestamp{
+			font-size: xx-small;
+			margin-left: 10px;
+
+		}
+	}
+	.chat__receiver{
+		margin-left: auto;
+		background-color: #dcf8c6;
+	}
 }

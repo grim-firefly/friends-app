@@ -33,6 +33,16 @@ const Chat = () => {
 					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
 					
 				</div>
+				<div className={`${Style.chat__message}`}>
+					<span className={`${Style.chat__name}`}>Tahsin Haider</span>
+					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
+					
+				</div>
+				<div className={`${Style.chat__message}`}>
+					<span className={`${Style.chat__name}`}>Tahsin Haider</span>
+					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
+					
+				</div>
 			</div>
 		</div>
 	);

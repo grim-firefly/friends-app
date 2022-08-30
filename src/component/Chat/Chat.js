@@ -1,9 +1,16 @@
-import React from 'react';
+import React ,  {useState} from 'react';
+// import from 'react';
 import Style from './Chat.module.scss';
-import { BsSearch, BsThreeDotsVertical } from 'react-icons/bs';
+import { BsSearch, BsThreeDotsVertical, BsEmojiHeartEyes, BsMic } from 'react-icons/bs';
 import { IoAttachOutline } from 'react-icons/io5';
 
 const Chat = () => {
+	const [input, setInput] = useState('');
+	const [seed, setSeed] = useState('');
+	const sendMessage = (e) => {
+		e.preventDefault();
+		console.log(input);
+	}
 	return (
 		<div className={`${Style.app__chat}`}>
 			<div className={`${Style.chat__header}`}>
@@ -26,22 +33,40 @@ const Chat = () => {
 				<div className={`${Style.chat__message}`}>
 					<span className={`${Style.chat__name}`}>Tahsin Haider</span>
 					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
-					
+
 				</div>
 				<div className={`${Style.chat__message} ${Style.chat__receiver}`}>
 					<span className={`${Style.chat__name}`}>MD. Khaiurl Hasan Sajid</span>
 					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
-					
+
 				</div>
 				<div className={`${Style.chat__message}`}>
 					<span className={`${Style.chat__name}`}>Tahsin Haider</span>
 					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
-					
+
 				</div>
 				<div className={`${Style.chat__message}`}>
 					<span className={`${Style.chat__name}`}>Tahsin Haider</span>
 					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
-					
+
+				</div>
+
+			</div>
+			<div className={`${Style.chat__footer}`}>
+				<div className=''>
+					<button className={`${Style.footer__emoji__btn}`} ><BsEmojiHeartEyes /></button>
+				</div>
+				<div className={`${Style.chat__massage__box}`}>
+					<form action="" className={`${Style.send__message_form}`}>
+						<input value={input} onChange={(e)=>{
+							setInput(e.target.value)
+						}} className={`${Style.send__massage__input}`} type="text" placeholder="Type a message" />
+						<button onClick={sendMessage} type="submit" className='hidden'>Send</button>
+					</form>
+				</div>
+				<div>
+					<button className={`${Style.footer__emoji__btn}`} ><BsMic /></button>
+
 				</div>
 			</div>
 		</div>

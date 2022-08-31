@@ -1,16 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import { FiMoreVertical } from 'react-icons/fi';
 import { MdOutlineDonutLarge } from 'react-icons/md';
 import { BsFillChatLeftTextFill, BsSearch } from 'react-icons/bs';
-
 import Style from './Sidebar.module.scss';
 import SidebarChat from '../SidebarChat/SidebarChat';
+//firebase
+import db from '../../firebase';
+import { collection, onSnapshot, doc, addDoc } from "firebase/firestore";
 
 
 const Sidebar = () => {
 	const [menu, setMenu] = useState(false);
+	const [addNew, setAddNew] = useState(false);
+	const [rooms, setRooms] = useState([]);
+	const [NewRoomName, setNewRoomName] = useState('');
+	useEffect(() => {
+		const getRooms = async () => {
+			onSnapshot(collection(db, "rooms"), (snapshot) => {
+				setRooms(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })));
+			});
+		};
+		getRooms();
+
+
+	}, []);
+
+	const addNewRoom = (e) => {
+		e.preventDefault();
+		if (NewRoomName) {
+			const addNewRoom = async () => {
+				await addDoc(collection(db, "rooms"), {
+					name: NewRoomName
+				});
+			}
+			addNewRoom();
+		}
+		setNewRoomName('');
+		setAddNew(false);
+
+	}
+
 	return (
 		<div className={`${Style.sidebar}`}>
 			{/* sidebar header  */}
@@ -25,10 +56,22 @@ const Sidebar = () => {
 				<div className={`inline-flex relative `}>
 
 					<button className={`${Style.sidebar__btn} rounded-full`}><MdOutlineDonutLarge /> </button>
-					<button className={`${Style.sidebar__btn} rounded-full`}><BsFillChatLeftTextFill /></button>
-					<button onClick={() => setMenu(!menu)} onBlur={() => setMenu(false)} className={`${Style.sidebar__btn} rounded-full`}><FiMoreVertical /> </button>
+					<button className={`${Style.sidebar__btn} rounded-full`}  onClick={() => setAddNew(!addNew)}
+
+					><BsFillChatLeftTextFill /></button>
+
+					<div className={`bg-[#00a884] py-4 px-4 rounded-lg absolute   ${Style.addnew__room}  ${addNew ? 'block' : 'hidden'} `} id="addnewChat__container" >
+						<form action="">
+							<input onChange={(e) => {
+								setNewRoomName(e.target.value);
+							}} className='  rounded-lg px-1 border-none outline-none py-1' type="text" placeholder='Add new Room' name="newChat" id="" />
+							<button className='hidden' type="submit" onClick={addNewRoom} >add new</button>
+						</form>
+					</div>
+
+					<button onClick={() => setMenu(!menu)} className={`${Style.sidebar__btn} rounded-full`}><FiMoreVertical /> </button>
 					<div className={`py-2 bg-white flex-col absolute top-full right-0 rounded-md overflow-hidden shadow-xl  ${menu ? 'flex' : 'hidden'} `}>
-						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>New Chat</button>
+						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>New Group</button>
 						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>Settings</button>
 						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>Log Out</button>
 
@@ -49,11 +92,12 @@ const Sidebar = () => {
 
 			{/* sidebar chats */}
 			<div className={`${Style.sidebar__chat}`}>
-				<SidebarChat name={"MD. Khairul Hasan Sajid"} massage={"Hey ! I am using whatsapp.."} />
-				<SidebarChat name={"Badsha Faysal"} massage={"Hey ! I am using whatsapp.."} />
-				<SidebarChat name={"Tahsin Haider"} massage={"Hey ! I am using whatsapp.."} />
-				<SidebarChat name={"Ismail Hossain"} massage={"Hey ! I am using whatsapp.."} />
-				<SidebarChat name={"Mehedi Hasan"} massage={"Hey ! I am using whatsapp.."} />
+				{
+					rooms.map(room => (
+						<SidebarChat key={room.id} id={room.id} name={room.data.name} message={"hey ! i'm using whatapp"} />
+					))
+				}
+
 
 			</div>
 		</div>

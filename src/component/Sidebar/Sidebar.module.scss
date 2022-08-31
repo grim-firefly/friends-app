@@ -3,6 +3,10 @@
 	border-right: 1px solid lightgray;
 	display: flex;
 	flex-direction: column;
+	.addnew__room{
+		top: 100%;
+		right: 0%;
+	}
 	.sidebar__btn {
 		font-size: 20px;
 		height: 40px;

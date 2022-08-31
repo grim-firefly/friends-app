@@ -10,6 +10,7 @@ const Chat = () => {
 	const sendMessage = (e) => {
 		e.preventDefault();
 		console.log(input);
+		setInput('');
 	}
 	return (
 		<div className={`${Style.app__chat}`}>

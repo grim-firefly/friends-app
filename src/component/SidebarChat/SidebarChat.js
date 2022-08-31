@@ -8,7 +8,7 @@ const SidebarChat = (props) => {
 			</div>
 			<div className='ml-2'>
 				<h2 className=''>{props.name}</h2>
-				<p className='text-xs'>{props.massage}</p>
+				<p className='text-xs'>{props.message}</p>
 			</div>
 		</div>
 	);

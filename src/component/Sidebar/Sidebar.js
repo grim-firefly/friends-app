@@ -16,13 +16,16 @@ const Sidebar = () => {
 	const [addNew, setAddNew] = useState(false);
 	const [rooms, setRooms] = useState([]);
 	const [NewRoomName, setNewRoomName] = useState('');
+	const connRef = collection(db, "rooms");
 	useEffect(() => {
 		const getRooms = async () => {
-			onSnapshot(collection(db, "rooms"), (snapshot) => {
+			onSnapshot(connRef, (snapshot) => {
 				setRooms(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })));
 			});
 		};
-		getRooms();
+		return () => {
+			getRooms();
+		}
 
 
 	}, []);
@@ -31,7 +34,7 @@ const Sidebar = () => {
 		e.preventDefault();
 		if (NewRoomName) {
 			const addNewRoom = async () => {
-				await addDoc(collection(db, "rooms"), {
+				await addDoc(connRef, {
 					name: NewRoomName
 				});
 			}
@@ -56,7 +59,7 @@ const Sidebar = () => {
 				<div className={`inline-flex relative `}>
 
 					<button className={`${Style.sidebar__btn} rounded-full`}><MdOutlineDonutLarge /> </button>
-					<button className={`${Style.sidebar__btn} rounded-full`}  onClick={() => setAddNew(!addNew)}
+					<button className={`${Style.sidebar__btn} rounded-full`} onClick={() => setAddNew(!addNew)}
 
 					><BsFillChatLeftTextFill /></button>
 

@@ -4,22 +4,37 @@ import Style from './Chat.module.scss';
 import { BsSearch, BsThreeDotsVertical, BsEmojiHeartEyes, BsMic } from 'react-icons/bs';
 import { IoAttachOutline } from 'react-icons/io5';
 import { useParams } from 'react-router-dom';
-import db from '../../firebase';
-import { collection, getDocs, doc, onSnapshot } from "firebase/firestore";
+import db, { auth } from '../../firebase';
+import { collection, getDocs, doc, addDoc, onSnapshot, serverTimestamp, orderBy, query } from "firebase/firestore";
+import { useAuthState } from 'react-firebase-hooks/auth';
 const Chat = () => {
 	const [input, setInput] = useState('');
 	const { roomId } = useParams();
 	const [roomName, setRoomName] = useState('');
+	const [message, setMessage] = useState([]);
 	const connRef = collection(db, 'rooms');
+	const [user] = useAuthState(auth);
+
 	useEffect(() => {
 		if (roomId) {
-			const getRoomName = async () => { 
+			const getRoomName = async () => {
 				onSnapshot(doc(connRef, roomId), (snapshot) => {
-
 					setRoomName(snapshot.data().name);
 				});
 			}
+
+
+			const getMessages = async () => {
+				const qq = query(collection(connRef, roomId, 'messages'), orderBy('timestamp', 'asc'));
+				onSnapshot(qq, (snapshot) => {
+					setMessage(snapshot.docs.map((doc) => doc.data()));
+				});
+			}
 			getRoomName();
+			getMessages();
+
+
+
 		}
 
 	}, [roomId]);
@@ -28,11 +43,22 @@ const Chat = () => {
 
 	const sendMessage = (e) => {
 		e.preventDefault();
+		if (roomId) {
+			const addMessage = async () => {
+				await addDoc(collection(connRef, roomId, 'messages'), {
+					message: input,
+					name: user.displayName,
+					timestamp: serverTimestamp()
+				});
+			}
+			addMessage();
+		}
 		setInput('');
 	}
 
 	return (
-		<div className={`${Style.app__chat}`}>
+		< div className={`${Style.app__chat}`
+		}>
 			<div className={`${Style.chat__header}`}>
 				<div className={`w-12`}>
 					<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="" />
@@ -50,26 +76,23 @@ const Chat = () => {
 				</div>
 			</div>
 			<div className={`${Style.chat__body}`}>
-				<div className={`${Style.chat__message}`}>
-					<span className={`${Style.chat__name}`}>Tahsin Haider</span>
-					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
+				{
+					message.map((msg) => (
+						<div className={`${Style.chat__message} ${msg.name == user.displayName ? Style.chat__receiver : ''} `}>
+							{
+								msg.name == user.displayName ?
+									'' : <span className={`${Style.chat__name}`}>{msg.name}</span>
 
-				</div>
-				<div className={`${Style.chat__message} ${Style.chat__receiver}`}>
-					<span className={`${Style.chat__name}`}>MD. Khaiurl Hasan Sajid</span>
-					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
+							}
 
-				</div>
-				<div className={`${Style.chat__message}`}>
-					<span className={`${Style.chat__name}`}>Tahsin Haider</span>
-					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
+							<p>{msg.message}<span className={`${Style.chat__timestamp}`}>{new Date(msg.timestamp * 1000).toUTCString()}</span></p>
+						</div>
 
-				</div>
-				<div className={`${Style.chat__message}`}>
-					<span className={`${Style.chat__name}`}>Tahsin Haider</span>
-					<p>Hey Guys<span className={`${Style.chat__timestamp}`}>11:30 pm</span></p>
 
-				</div>
+					))
+				}
+
+
 
 			</div>
 			<div className={`${Style.chat__footer}`}>
@@ -85,11 +108,13 @@ const Chat = () => {
 					</form>
 				</div>
 				<div>
+
+
 					<button className={`${Style.footer__emoji__btn}`} ><BsMic /></button>
 
 				</div>
 			</div>
-		</div>
+		</ div>
 	);
 }
 export default Chat;

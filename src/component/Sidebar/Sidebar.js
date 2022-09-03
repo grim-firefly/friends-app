@@ -9,7 +9,9 @@ import SidebarChat from '../SidebarChat/SidebarChat';
 //firebase
 import db from '../../firebase';
 import { collection, onSnapshot, doc, addDoc } from "firebase/firestore";
-
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Sidebar = () => {
 	const [menu, setMenu] = useState(false);
@@ -17,6 +19,7 @@ const Sidebar = () => {
 	const [rooms, setRooms] = useState([]);
 	const [NewRoomName, setNewRoomName] = useState('');
 	const connRef = collection(db, "rooms");
+	const [user] = useAuthState(auth);
 	useEffect(() => {
 		const getRooms = async () => {
 			onSnapshot(connRef, (snapshot) => {
@@ -39,6 +42,7 @@ const Sidebar = () => {
 				});
 			}
 			addNewRoom();
+
 		}
 		setNewRoomName('');
 		setAddNew(false);
@@ -52,7 +56,7 @@ const Sidebar = () => {
 				<div>
 
 					<button className={`${Style.sidebar__btn_head} rounded-full`}>
-						<img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="user" srcSet="" />
+						<img src={user.photoURL} alt="user" srcSet="" />
 					</button>
 
 				</div>
@@ -65,7 +69,7 @@ const Sidebar = () => {
 
 					<div className={`bg-[#00a884] py-4 px-4 rounded-lg absolute   ${Style.addnew__room}  ${addNew ? 'block' : 'hidden'} `} id="addnewChat__container" >
 						<form action="">
-							<input onChange={(e) => {
+							<input value={NewRoomName} onChange={(e) => {
 								setNewRoomName(e.target.value);
 							}} className='  rounded-lg px-1 border-none outline-none py-1' type="text" placeholder='Add new Room' name="newChat" id="" />
 							<button className='hidden' type="submit" onClick={addNewRoom} >add new</button>
@@ -76,7 +80,7 @@ const Sidebar = () => {
 					<div className={`py-2 bg-white flex-col absolute top-full right-0 rounded-md overflow-hidden shadow-xl  ${menu ? 'flex' : 'hidden'} `}>
 						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>New Group</button>
 						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>Settings</button>
-						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`}>Log Out</button>
+						<button className={` bg-white hover:bg-[#ebebeb] w-28 py-1`} onClick={() => { signOut(auth) }} >Log Out</button>
 
 					</div>
 

@@ -9,14 +9,15 @@ const Home = () => {
 			<div className={`${Style.app__body} flex`}>
 				{/* sidebar  */}
 				<Sidebar />
-				<Routes>
+				<Chat />
+				{/* <Routes>
 					<Route path='/' element={<Chat />} >
 						<Route path='rooms/:roomId' element={<Chat />} />
 					</Route>
 
 					{/* chat  */}
 
-				</Routes>
+				{/* </Routes> */}
 			</div>
 		</div>
 	);

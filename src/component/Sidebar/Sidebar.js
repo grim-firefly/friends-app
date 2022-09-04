@@ -26,9 +26,8 @@ const Sidebar = () => {
 				setRooms(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })));
 			});
 		};
-		return () => {
-			getRooms();
-		}
+		getRooms();
+		
 
 
 	}, []);
